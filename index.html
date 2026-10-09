@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My Sites</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- =========================
+         ログイン画面
+    ========================== -->
+
+    <main id="loginScreen" class="screen">
+      <div class="login-card">
+        <div class="lock-icon">🔐</div>
+
+        <h1>My Sites</h1>
+
+        <p class="subtitle">パスワードを入力してください</p>
+
+        <form id="loginForm">
+          <input
+            id="passwordInput"
+            type="password"
+            placeholder="パスワード"
+            autocomplete="current-password"
+            required
+          />
+
+          <button type="submit">開く</button>
+        </form>
+
+        <p id="loginMessage" class="message"></p>
+      </div>
+    </main>
+
+    <!-- =========================
+         サイト一覧
+    ========================== -->
+
+    <main id="siteScreen" class="screen hidden">
+      <header class="header">
+        <div>
+          <h1>🌐 My Sites</h1>
+
+          <p>サイト一覧</p>
+        </div>
+
+        <button id="logoutButton" class="logout-button">🔒 ロック</button>
+      </header>
+
+      <section id="siteList" class="site-list"></section>
+
+      <p id="siteMessage" class="message"></p>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

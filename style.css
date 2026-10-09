@@ -1,0 +1,307 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  min-height: 100vh;
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+
+  color: #1f2937;
+}
+
+/* =========================
+   共通
+========================= */
+
+.screen {
+  min-height: 100vh;
+
+  padding: 30px 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================
+   ログイン
+========================= */
+
+#loginScreen {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+.login-card {
+  width: 100%;
+
+  max-width: 420px;
+
+  padding: 40px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+
+  text-align: center;
+}
+
+.lock-icon {
+  font-size: 56px;
+
+  margin-bottom: 10px;
+}
+
+.login-card h1 {
+  margin: 0;
+
+  font-size: 30px;
+}
+
+.subtitle {
+  margin-top: 10px;
+
+  margin-bottom: 25px;
+
+  color: #6b7280;
+}
+
+/* =========================
+   入力
+========================= */
+
+#passwordInput {
+  width: 100%;
+
+  padding: 15px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 12px;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+#passwordInput:focus {
+  border-color: #6366f1;
+
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* =========================
+   ボタン
+========================= */
+
+#loginForm button {
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding: 15px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #4f46e5;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+#loginForm button:hover {
+  opacity: 0.9;
+}
+
+#loginForm button:disabled {
+  opacity: 0.6;
+
+  cursor: wait;
+}
+
+/* =========================
+   ヘッダー
+========================= */
+
+.header {
+  max-width: 1000px;
+
+  margin: 0 auto 30px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.header h1 {
+  margin: 0;
+
+  font-size: 30px;
+}
+
+.header p {
+  margin: 6px 0 0;
+
+  color: #6b7280;
+}
+
+.logout-button {
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 10px;
+
+  background: #111827;
+
+  color: white;
+
+  cursor: pointer;
+}
+
+/* =========================
+   サイトカード
+========================= */
+
+.site-list {
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 18px;
+}
+
+.site-card {
+  display: block;
+
+  padding: 24px;
+
+  background: white;
+
+  border-radius: 18px;
+
+  color: inherit;
+
+  text-decoration: none;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.site-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.site-icon {
+  font-size: 40px;
+
+  margin-bottom: 15px;
+}
+
+.site-name {
+  font-size: 20px;
+
+  font-weight: bold;
+
+  margin-bottom: 8px;
+}
+
+.site-description {
+  color: #6b7280;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+/* =========================
+   メッセージ
+========================= */
+
+.message {
+  margin-top: 15px;
+
+  text-align: center;
+
+  color: #dc2626;
+}
+
+/* =========================
+   スマホ
+========================= */
+
+@media (max-width: 600px) {
+  .screen {
+    padding: 20px 15px;
+  }
+
+  .login-card {
+    padding: 30px 20px;
+  }
+
+  .header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .header h1 {
+    font-size: 25px;
+  }
+
+  .logout-button {
+    width: 100%;
+  }
+}
+
+.site-status {
+  margin-top: 18px;
+
+  font-size: 28px;
+
+  font-weight: bold;
+
+  text-align: right;
+}
+
+.status-ok {
+  color: #16a34a;
+}
+
+.status-ng {
+  color: #dc2626;
+}
+
+.status-unknown {
+  color: #6b7280;
+}
