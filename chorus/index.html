@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>友〜旅立ちの時〜 テンポ調整</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #253047;
+        --muted: #667085;
+        --line: #dfe5ef;
+        --accent: #5267d8;
+        --soft: #f4f6ff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 24px 14px 40px;
+        background: #f6f8fc;
+        color: var(--ink);
+        font-family:
+          system-ui,
+          -apple-system,
+          "Hiragino Kaku Gothic ProN",
+          Meiryo,
+          sans-serif;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: clamp(1.35rem, 4vw, 2rem);
+        margin: 0 0 8px;
+      }
+      .intro {
+        color: var(--muted);
+        line-height: 1.7;
+        margin: 0 0 20px;
+      }
+      section {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px;
+        margin: 14px 0;
+        box-shadow: 0 4px 18px #2530470a;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      button,
+      select,
+      input[type="number"] {
+        font: inherit;
+      }
+      button {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 14px;
+        background: white;
+        cursor: pointer;
+        color: var(--ink);
+      }
+      button.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+      }
+      select {
+        min-width: 180px;
+        flex: 1;
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: white;
+        color: var(--ink);
+      }
+      audio {
+        width: 100%;
+        margin: 12px 0 2px;
+      }
+      .metric {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .metric > div {
+        background: var(--soft);
+        padding: 14px;
+        border-radius: 12px;
+      }
+      .label {
+        display: block;
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+      .big {
+        font-size: 1.7rem;
+        font-weight: 750;
+        font-variant-numeric: tabular-nums;
+      }
+      .unit {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .control-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: baseline;
+        margin-bottom: 8px;
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+      .range-ends {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+      .number-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      input[type="number"] {
+        width: 100px;
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .note {
+        background: #fff8e7;
+        border: 1px solid #f3dfaa;
+        color: #684d13;
+        padding: 12px 14px;
+        border-radius: 10px;
+        line-height: 1.65;
+        font-size: 0.9rem;
+      }
+      .status {
+        color: var(--muted);
+        font-size: 0.9rem;
+        min-height: 1.4em;
+        margin-top: 8px;
+      }
+      body {
+        background: linear-gradient(180deg, #eef2ff 0, #f6f8fc 240px);
+      }
+      h1 {
+        letter-spacing: 0.02em;
+      }
+      section {
+        padding: 20px;
+        transition: box-shadow 0.2s ease;
+      }
+      section:focus-within {
+        box-shadow: 0 6px 22px #25304712;
+      }
+      button,
+      select,
+      input[type="number"] {
+        min-height: 44px;
+      }
+      button {
+        font-weight: 600;
+        transition:
+          background-color 0.15s ease,
+          border-color 0.15s ease,
+          transform 0.15s ease;
+      }
+      button:hover {
+        background: #f4f6ff;
+        border-color: #c5ccef;
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      button:focus-visible,
+      select:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #5267d855;
+        outline-offset: 2px;
+      }
+      audio {
+        display: block;
+      }
+      .metric > div {
+        border: 1px solid #e8ebfb;
+      }
+      .control-head {
+        line-height: 1.5;
+      }
+      input[type="range"] {
+        min-height: 36px;
+        touch-action: pan-y;
+      }
+      input[type="number"] {
+        background: white;
+        color: var(--ink);
+      }
+      #status {
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: var(--soft);
+      }
+      .metronome-controls {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .metro-tempo {
+        margin: 18px 0;
+      }
+      .sync-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        color: var(--muted);
+      }
+      .sync-option input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--accent);
+      }
+      .meter-pattern {
+        margin-top: 18px;
+      }
+      .meter-pattern .number-wrap {
+        margin-top: 8px;
+      }
+      #meterPattern {
+        width: 130px;
+        min-height: 44px;
+        padding: 8px 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--ink);
+        font: inherit;
+      }
+      .meter-preview {
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .bar-group {
+        padding: 7px 9px 9px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #f8f9ff;
+      }
+      .bar-label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--muted);
+        font-size: 0.72rem;
+        text-align: center;
+      }
+      .bar-beats {
+        display: flex;
+        gap: 6px;
+      }
+      #startMetronome {
+        min-width: 150px;
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+      }
+      #startMetronome:hover {
+        background: #4054c2;
+        border-color: #4054c2;
+      }
+      .beat-count {
+        display: flex;
+        gap: 8px;
+      }
+      .beat-count span {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: #fff;
+        color: var(--muted);
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        transition:
+          background-color 0.08s ease,
+          color 0.08s ease,
+          transform 0.08s ease;
+      }
+      .beat-count span.active {
+        transform: scale(1.12);
+        border-color: var(--accent);
+        background: var(--accent);
+        color: white;
+      }
+      .beat-count span.bar-first-beat.active {
+        border-color: #e58b2a;
+        background: #e58b2a;
+      }
+      details summary {
+        display: flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        cursor: pointer;
+        font-weight: 650;
+        list-style: none;
+      }
+      .metronome-details > summary {
+        font-size: 1.2rem;
+      }
+      details summary::-webkit-details-marker {
+        display: none;
+      }
+      details summary::after {
+        content: "+";
+        display: grid;
+        width: 28px;
+        height: 28px;
+        flex: 0 0 28px;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--soft);
+        color: var(--accent);
+        font-size: 1.2rem;
+      }
+      details[open] summary::after {
+        content: "−";
+      }
+      details summary:focus-visible {
+        outline: 3px solid #5267d855;
+        outline-offset: 3px;
+        border-radius: 6px;
+      }
+      .details-content {
+        padding-top: 12px;
+      }
+      .note-details {
+        margin-top: 14px;
+        padding: 8px 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: white;
+      }
+      .note-details .note {
+        margin-bottom: 8px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition: none !important;
+        }
+      }
+      @media (max-width: 480px) {
+        section {
+          padding: 14px;
+        }
+        .metric {
+          grid-template-columns: 1fr;
+        }
+        .big {
+          font-size: 1.4rem;
+        }
+        section:first-of-type .row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-areas:
+            "select select"
+            "previous next";
+        }
+        #trackSelect {
+          grid-area: select;
+          width: 100%;
+        }
+        #previousTrack {
+          grid-area: previous;
+        }
+        #nextTrack {
+          grid-area: next;
+        }
+        .control-head {
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>友〜旅立ちの時〜 テンポ調整</h1>
+      <p class="intro">
+        音源を切り替えながら、目標BPMと微調整スライダーでテンポを合わせるためのツールです。
+      </p>
+
+      <section>
+        <div class="row">
+          <button id="previousTrack" type="button">← 前の音源</button>
+          <select id="trackSelect" aria-label="音源を選択">
+            <option value="piano.mp3" data-native-bpm="86">
+              ピアノ（伴奏）
+            </option>
+            <option value="soprano.mp3" data-native-bpm="83">ソプラノ</option>
+            <option value="alto.mp3" data-native-bpm="83">アルト</option>
+            <option value="boys.mp3" data-native-bpm="83">男声</option>
+            <option value="all.mp3" data-native-bpm="81">全体</option>
+          </select>
+          <button id="nextTrack" type="button">次の音源 →</button>
+        </div>
+        <audio id="myAudio" src="piano.mp3" controls preload="metadata"></audio>
+        <div id="status" class="status" role="status">
+          音源を読み込んでいます。
+        </div>
+      </section>
+
+      <section>
+        <div class="metric">
+          <div>
+            <span class="label">目標テンポ</span
+            ><span class="big"
+              ><span id="targetBpmText">73</span>
+              <span class="unit">BPM</span></span
+            >
+          </div>
+          <div>
+            <span class="label">設定上の再生テンポ</span
+            ><span class="big"
+              ><span id="currentBpm">73</span>
+              <span class="unit">BPM</span></span
+            >
+          </div>
+        </div>
+        <div style="margin-top: 18px">
+          <div class="control-head">
+            <label for="targetSlider">目標BPM</label
+            ><strong><span id="targetSliderValue">73</span> BPM</strong>
+          </div>
+          <input
+            id="targetSlider"
+            type="range"
+            min="60"
+            max="90"
+            step="1"
+            value="73"
+          />
+          <div class="range-ends"><span>60 BPM</span><span>90 BPM</span></div>
+        </div>
+      </section>
+
+      <section>
+        <details class="metronome-details">
+          <summary id="metronomeTitle">メトロノーム設定</summary>
+          <div class="details-content">
+            <div class="metronome-controls">
+              <button id="startMetronome" type="button" aria-pressed="false">
+                メトロノーム開始
+              </button>
+            </div>
+            <div class="metro-tempo">
+              <div class="control-head">
+                <label for="metronomeTempo">メトロノームの速さ</label>
+                <strong><span id="metronomeTempoValue">73</span> BPM</strong>
+              </div>
+              <input
+                id="metronomeTempo"
+                type="range"
+                min="40"
+                max="180"
+                step="1"
+                value="73"
+              />
+              <div class="range-ends">
+                <span>40 BPM</span><span>180 BPM</span>
+              </div>
+              <label class="sync-option" for="followSongTempo">
+                <input id="followSongTempo" type="checkbox" checked />
+                曲のテンポに連動
+              </label>
+            </div>
+            <div class="meter-pattern">
+              <label for="meterPattern"><strong>小節ごとの拍数</strong></label>
+              <p class="status">
+                例：4,2,4 →「1・2・3・4／1・2／1・2・3・4」を繰り返します。
+              </p>
+              <div class="number-wrap">
+                <input
+                  id="meterPattern"
+                  type="text"
+                  value="4,2,4"
+                  inputmode="numeric"
+                  aria-label="小節ごとの拍数"
+                />
+                <button id="applyMeterPattern" type="button">
+                  リズムを適用
+                </button>
+              </div>
+            </div>
+            <div
+              id="meterPreview"
+              class="meter-preview"
+              aria-label="設定した小節と拍の並び"
+            ></div>
+            <p
+              id="metronomeStatus"
+              class="status"
+              role="status"
+              aria-live="polite"
+            >
+              1拍目を強く鳴らします。
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section>
+        <details>
+          <summary>選択中の音源の元BPM</summary>
+          <div class="details-content">
+            <div class="control-head">
+              <span>設定済みの元BPM</span>
+              <strong><span id="nativeBpmLabel">82</span> BPM</strong>
+            </div>
+            <p class="status">
+              元BPMを変更する場合は、音源一覧の各項目にある
+              <code>data-native-bpm</code> の値を編集してください。
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section>
+        <details>
+          <summary>微調整・リセット</summary>
+          <div class="details-content">
+            <div class="control-head">
+              <label for="fineSlider">微調整（目標BPMに対する倍率）</label
+              ><strong><span id="fineValue">1.00</span> 倍</strong>
+            </div>
+            <input
+              id="fineSlider"
+              type="range"
+              min="0.85"
+              max="1.15"
+              step="0.005"
+              value="1"
+            />
+            <div class="range-ends">
+              <span>少し遅く</span><span>少し速く</span>
+            </div>
+            <div class="row" style="margin-top: 12px">
+              <button id="resetFine" type="button">微調整をリセット</button>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <details class="note-details">
+        <summary>使い方・注意事項</summary>
+        <p class="note">
+          <strong>大事：</strong
+          >このツールは入力した「元BPM」をもとに再生速度を計算します。元BPMが正確でなければ、表示BPMも実際の拍とはずれます。また、通常の音声再生速度変更なので、速度を変えると音程も変わります。音源ファイル（piano.mp3
+          / soprano.mp3 / alto.mp3 / boys.mp3 /
+          all.mp3）は、このHTMLと同じフォルダに置いてください。
+        </p>
+      </details>
+    </main>
+    <script>
+      const audio = document.getElementById("myAudio");
+      const trackSelect = document.getElementById("trackSelect");
+      const targetSlider = document.getElementById("targetSlider");
+      const fineSlider = document.getElementById("fineSlider");
+      const status = document.getElementById("status");
+      const metronomeButton = document.getElementById("startMetronome");
+      const metronomeStatus = document.getElementById("metronomeStatus");
+      const metronomeTempoSlider = document.getElementById("metronomeTempo");
+      const metronomeTempoValue = document.getElementById(
+        "metronomeTempoValue",
+      );
+      const followSongTempo = document.getElementById("followSongTempo");
+      const meterPatternInput = document.getElementById("meterPattern");
+      const meterPreview = document.getElementById("meterPreview");
+      let metronomeAudioContext;
+      let metronomeTimer = null;
+      let metronomeRunning = false;
+      let metronomeBars = [4, 2, 4];
+      let beatIndicators = [];
+      let metronomeBarIndex = 0;
+      let metronomeBeat = 0;
+      let nextMetronomeBeatTime = 0;
+
+      function currentFilename() {
+        return trackSelect.value;
+      }
+      function nativeBpm(filename) {
+        const option = [...trackSelect.options].find(
+          (item) => item.value === filename,
+        );
+        return Number(option?.dataset.nativeBpm) || 76;
+      }
+
+      function updatePlayback() {
+        const target = Number(targetSlider.value);
+        const native = nativeBpm(currentFilename());
+        const fine = Number(fineSlider.value);
+        const correctionRate = (target / native) * fine;
+        audio.playbackRate = correctionRate;
+
+        document.getElementById("targetBpmText").textContent = target;
+        document.getElementById("targetSliderValue").textContent = target;
+        document.getElementById("nativeBpmLabel").textContent = native;
+        document.getElementById("fineValue").textContent = fine
+          .toFixed(3)
+          .replace(/0+$/, "")
+          .replace(/\.$/, "");
+        document.getElementById("currentBpm").textContent = Math.round(
+          target * fine,
+        );
+        status.textContent = `再生速度 ${correctionRate.toFixed(3)} 倍（元BPM ${native} → 設定上 約${Math.round(target * fine)} BPM）`;
+      }
+
+      function currentTempo() {
+        return Number(targetSlider.value) * Number(fineSlider.value);
+      }
+
+      function selectedMetronomeTempo() {
+        return followSongTempo.checked
+          ? currentTempo()
+          : Number(metronomeTempoSlider.value);
+      }
+
+      function describeMeterPattern() {
+        return metronomeBars.map((beats) => `${beats}拍`).join(" → ");
+      }
+
+      function updateMetronomeTempoUI() {
+        if (followSongTempo.checked) {
+          metronomeTempoSlider.value = String(Math.round(currentTempo()));
+        }
+        metronomeTempoSlider.disabled = followSongTempo.checked;
+        metronomeTempoValue.textContent = String(
+          Math.round(selectedMetronomeTempo()),
+        );
+        updateMetronomeStatus();
+      }
+
+      function updateMetronomeStatus() {
+        if (metronomeRunning) {
+          metronomeStatus.textContent = `${describeMeterPattern()} を繰り返し中・${Math.round(selectedMetronomeTempo())} BPM`;
+        }
+      }
+
+      function renderMeterPattern() {
+        meterPreview.replaceChildren();
+        beatIndicators = [];
+        metronomeBars.forEach((beats, barIndex) => {
+          const bar = document.createElement("div");
+          bar.className = "bar-group";
+          const label = document.createElement("span");
+          label.className = "bar-label";
+          label.textContent = `${barIndex + 1}小節目`;
+          const beatRow = document.createElement("div");
+          beatRow.className = "bar-beats beat-count";
+
+          for (let beat = 0; beat < beats; beat += 1) {
+            const indicator = document.createElement("span");
+            indicator.textContent = String(beat + 1);
+            if (beat === 0) indicator.classList.add("bar-first-beat");
+            beatRow.append(indicator);
+            beatIndicators.push({ element: indicator, barIndex, beat });
+          }
+
+          bar.append(label, beatRow);
+          meterPreview.append(bar);
+        });
+      }
+
+      function applyMeterPattern() {
+        const values = meterPatternInput.value
+          .split(/[,，、\s]+/)
+          .filter(Boolean)
+          .map(Number);
+        if (
+          values.length < 1 ||
+          values.length > 128 ||
+          values.some(
+            (beats) => !Number.isInteger(beats) || beats < 1 || beats > 12,
+          )
+        ) {
+          metronomeStatus.textContent =
+            "拍数は1〜12の整数を、カンマ区切りで最大128小節まで入力してください。";
+          return;
+        }
+
+        const wasRunning = metronomeRunning;
+        if (wasRunning) stopMetronome();
+        metronomeBars = values;
+        meterPatternInput.value = values.join(",");
+        metronomeBarIndex = 0;
+        metronomeBeat = 0;
+        renderMeterPattern();
+        metronomeStatus.textContent = `${describeMeterPattern()} を設定しました。`;
+        if (wasRunning) {
+          startMetronome().catch((error) => {
+            console.error("メトロノームを再開できませんでした", error);
+            metronomeStatus.textContent =
+              "メトロノームを再開できませんでした。";
+          });
+        }
+      }
+
+      function scheduleMetronomeBeat(when, barIndex, beat) {
+        const accent = beat === 0;
+        const oscillator = metronomeAudioContext.createOscillator();
+        const gain = metronomeAudioContext.createGain();
+        oscillator.frequency.value = accent ? 1100 : 800;
+        gain.gain.setValueAtTime(0.0001, when);
+        gain.gain.exponentialRampToValueAtTime(0.7, when + 0.004);
+        gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.055);
+        oscillator.connect(gain);
+        gain.connect(metronomeAudioContext.destination);
+        oscillator.start(when);
+        oscillator.stop(when + 0.06);
+
+        const delay = Math.max(
+          0,
+          (when - metronomeAudioContext.currentTime) * 1000,
+        );
+        window.setTimeout(() => {
+          if (!metronomeRunning) return;
+          beatIndicators.forEach((indicator) => {
+            indicator.element.classList.toggle(
+              "active",
+              indicator.barIndex === barIndex && indicator.beat === beat,
+            );
+          });
+        }, delay);
+      }
+
+      function runMetronomeScheduler() {
+        if (!metronomeRunning) return;
+        const scheduleUntil = metronomeAudioContext.currentTime + 0.1;
+        while (nextMetronomeBeatTime < scheduleUntil) {
+          scheduleMetronomeBeat(
+            nextMetronomeBeatTime,
+            metronomeBarIndex,
+            metronomeBeat,
+          );
+          nextMetronomeBeatTime += 60 / selectedMetronomeTempo();
+          metronomeBeat += 1;
+          if (metronomeBeat >= metronomeBars[metronomeBarIndex]) {
+            metronomeBeat = 0;
+            metronomeBarIndex = (metronomeBarIndex + 1) % metronomeBars.length;
+          }
+        }
+        metronomeTimer = window.setTimeout(runMetronomeScheduler, 25);
+      }
+
+      async function startMetronome() {
+        const AudioContextClass =
+          window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) {
+          metronomeStatus.textContent =
+            "このブラウザーはメトロノームに対応していません。";
+          return;
+        }
+        metronomeAudioContext ??= new AudioContextClass();
+        await metronomeAudioContext.resume();
+        metronomeRunning = true;
+        metronomeBarIndex = 0;
+        metronomeBeat = 0;
+        nextMetronomeBeatTime = metronomeAudioContext.currentTime + 0.05;
+        metronomeButton.textContent = "メトロノーム停止";
+        metronomeButton.setAttribute("aria-pressed", "true");
+        updateMetronomeStatus();
+        runMetronomeScheduler();
+      }
+
+      function stopMetronome() {
+        metronomeRunning = false;
+        window.clearTimeout(metronomeTimer);
+        beatIndicators.forEach((indicator) =>
+          indicator.element.classList.remove("active"),
+        );
+        metronomeButton.textContent = "メトロノーム開始";
+        metronomeButton.setAttribute("aria-pressed", "false");
+        metronomeStatus.textContent = "メトロノームを停止しました。";
+      }
+
+      metronomeButton.addEventListener("click", () => {
+        if (metronomeRunning) stopMetronome();
+        else
+          startMetronome().catch((error) => {
+            console.error("メトロノームを開始できませんでした", error);
+            metronomeStatus.textContent =
+              "メトロノームを開始できませんでした。";
+          });
+      });
+      metronomeTempoSlider.addEventListener("input", () => {
+        metronomeTempoValue.textContent = metronomeTempoSlider.value;
+        updateMetronomeStatus();
+      });
+      followSongTempo.addEventListener("change", updateMetronomeTempoUI);
+      document
+        .getElementById("applyMeterPattern")
+        .addEventListener("click", applyMeterPattern);
+      meterPatternInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") applyMeterPattern();
+      });
+      renderMeterPattern();
+      updateMetronomeTempoUI();
+
+      function selectTrack(filename) {
+        const wasPlaying = !audio.paused;
+        audio.src = filename;
+        audio.load();
+        updatePlayback();
+        if (wasPlaying)
+          audio.play().catch(() => {
+            status.textContent =
+              "再生できませんでした。再生ボタンを押してください。";
+          });
+      }
+
+      function changeTrack(direction) {
+        const next =
+          (trackSelect.selectedIndex + direction + trackSelect.options.length) %
+          trackSelect.options.length;
+        trackSelect.selectedIndex = next;
+        selectTrack(trackSelect.value);
+      }
+
+      document
+        .getElementById("previousTrack")
+        .addEventListener("click", () => changeTrack(-1));
+      document
+        .getElementById("nextTrack")
+        .addEventListener("click", () => changeTrack(1));
+      trackSelect.addEventListener("change", () =>
+        selectTrack(currentFilename()),
+      );
+      targetSlider.addEventListener("input", () => {
+        updatePlayback();
+        if (followSongTempo.checked) updateMetronomeTempoUI();
+      });
+      fineSlider.addEventListener("input", () => {
+        updatePlayback();
+        if (followSongTempo.checked) updateMetronomeTempoUI();
+      });
+      document.getElementById("resetFine").addEventListener("click", () => {
+        fineSlider.value = "1";
+        updatePlayback();
+      });
+      audio.addEventListener("error", () => {
+        status.textContent = `音源を読み込めません：${currentFilename()}。HTMLと同じフォルダにファイルがあるか確認してください。`;
+      });
+      audio.addEventListener("loadedmetadata", () => {
+        status.textContent = `読み込み完了：${currentFilename()}`;
+      });
+
+      updatePlayback();
+    </script>
+  </body>
+</html>
