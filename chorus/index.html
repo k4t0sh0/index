@@ -198,6 +198,25 @@
       audio {
         display: block;
       }
+      .seek-control {
+        margin-top: 8px;
+      }
+      .seek-control input {
+        width: 100%;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+      .seek-control input:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+      .seek-times {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-variant-numeric: tabular-nums;
+      }
       .metric > div {
         border: 1px solid #e8ebfb;
       }
@@ -426,10 +445,28 @@
             <option value="alto.mp3" data-native-bpm="83">アルト</option>
             <option value="boys.mp3" data-native-bpm="83">男声</option>
             <option value="all.mp3" data-native-bpm="81">全体</option>
+            <option value="anatahe_all.mp3" data-native-bpm="80">あなたへ全体</option>
+            <option value="anatahe_boys.mp3" data-native-bpm="80">あなたへ男声</option>
           </select>
           <button id="nextTrack" type="button">次の音源 →</button>
         </div>
         <audio id="myAudio" src="piano.mp3" controls preload="metadata"></audio>
+        <div class="seek-control">
+          <input
+            id="seekSlider"
+            type="range"
+            min="0"
+            max="1000"
+            value="0"
+            aria-label="再生位置"
+            aria-valuetext="0:00 / 0:00"
+            disabled
+          />
+          <div class="seek-times" aria-hidden="true">
+            <span id="currentTimeText">0:00</span>
+            <span id="durationText">0:00</span>
+          </div>
+        </div>
         <div id="status" class="status" role="status">
           音源を読み込んでいます。
         </div>
@@ -588,6 +625,9 @@
     </main>
     <script>
       const audio = document.getElementById("myAudio");
+      const seekSlider = document.getElementById("seekSlider");
+      const currentTimeText = document.getElementById("currentTimeText");
+      const durationText = document.getElementById("durationText");
       const trackSelect = document.getElementById("trackSelect");
       const targetSlider = document.getElementById("targetSlider");
       const fineSlider = document.getElementById("fineSlider");
@@ -612,6 +652,30 @@
 
       function currentFilename() {
         return trackSelect.value;
+      }
+
+      function formatTime(seconds) {
+        if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
+      }
+
+      function updateSeekUI() {
+        const duration = audio.duration;
+        const hasDuration = Number.isFinite(duration) && duration > 0;
+        seekSlider.disabled = !hasDuration;
+        currentTimeText.textContent = formatTime(audio.currentTime);
+        durationText.textContent = formatTime(duration);
+        if (hasDuration && !seekSlider.matches(":active")) {
+          seekSlider.value = String(
+            Math.round((audio.currentTime / duration) * 1000),
+          );
+        }
+        seekSlider.setAttribute(
+          "aria-valuetext",
+          `${formatTime(audio.currentTime)} / ${formatTime(duration)}`,
+        );
       }
       function nativeBpm(filename) {
         const option = [...trackSelect.options].find(
@@ -831,6 +895,18 @@
       renderMeterPattern();
       updateMetronomeTempoUI();
 
+      seekSlider.addEventListener("input", () => {
+        if (Number.isFinite(audio.duration) && audio.duration > 0) {
+          audio.currentTime =
+            (Number(seekSlider.value) / 1000) * audio.duration;
+          updateSeekUI();
+        }
+      });
+      audio.addEventListener("timeupdate", updateSeekUI);
+      audio.addEventListener("loadedmetadata", updateSeekUI);
+      audio.addEventListener("durationchange", updateSeekUI);
+      audio.addEventListener("emptied", updateSeekUI);
+
       function selectTrack(filename) {
         const wasPlaying = !audio.paused;
         audio.src = filename;
@@ -879,6 +955,7 @@
         status.textContent = `読み込み完了：${currentFilename()}`;
       });
 
+      updateSeekUI();
       updatePlayback();
     </script>
   </body>
